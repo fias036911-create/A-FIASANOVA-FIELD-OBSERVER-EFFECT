@@ -1,0 +1,250 @@
+"""
+EXAMPLE USAGE: Quantum Observer Effect Simulations
+Quick start guide for running FIAS∆NOV∆ Field simulations
+"""
+
+from quantum_observer_resonance import *
+import numpy as np
+
+print("""
+╔════════════════════════════════════════════════════════════════╗
+║                    EXAMPLE USAGE GUIDE                         ║
+║           FIAS∆NOV∆ Field Observer Effect Simulations          ║
+╚════════════════════════════════════════════════════════════════╝
+""")
+
+# =============================================================================
+# EXAMPLE 1: Basic Observer-Pattern Interaction
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 1: Single Observation Event")
+print("="*70 + "\n")
+
+# Create a single resonant pattern (e.g., a quantum particle)
+particle = ResonantPattern(
+    omega=7.83,  # Schumann resonance frequency
+    amplitude=1.0,
+    phase=0.0,
+    coherence=0.95
+)
+
+# Create an observer (consciousness)
+observer = QuantumObserver(
+    omega_observer=7.83,  # Tuned to same frequency
+    coherence=0.987
+)
+
+# Create field state with single pattern
+field = QuantumFieldState()
+field.add_pattern(particle, coefficient=1.0)
+
+# Perform measurement
+print("Before measurement:")
+print(f"  Pattern frequency: {particle.omega:.3f} Hz")
+print(f"  Observer frequency: {observer.omega:.3f} Hz")
+print(f"  Expected coupling: HIGH (resonance)")
+
+measurement = observer.measure(field, t=0)
+
+print(f"\nMeasurement result:")
+print(f"  Selected pattern: ω = {measurement['selected_pattern'].omega:.3f} Hz")
+print(f"  Collapse probability: {measurement['probability']:.4f}")
+print(f"  Observer coupling H_om: {measurement['coupling']:.4f}")
+
+# =============================================================================
+# EXAMPLE 2: Multiple Pattern Superposition
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 2: Superposition Collapse")
+print("="*70 + "\n")
+
+# Create field with multiple patterns
+field2 = QuantumFieldState()
+
+# Add patterns at different frequencies
+frequencies = [6.0, 7.83, 9.5, 12.0, 15.0]
+for omega in frequencies:
+    pattern = ResonantPattern(
+        omega=omega,
+        amplitude=1.0,
+        phase=np.random.uniform(0, 2*np.pi),
+        coherence=0.9
+    )
+    field2.add_pattern(pattern, coefficient=1.0/np.sqrt(len(frequencies)))
+
+# Observer tuned to Schumann resonance
+observer2 = QuantumObserver(omega_observer=7.83, coherence=0.99)
+
+print("Field contains patterns at frequencies:")
+for i, (p, c) in enumerate(field2.patterns):
+    print(f"  Pattern {i+1}: ω = {p.omega:.2f} Hz, |c|² = {np.abs(c)**2:.4f}")
+
+print(f"\nObserver frequency: {observer2.omega:.2f} Hz")
+print("Observer will preferentially collapse to 7.83 Hz pattern (resonance)...")
+
+measurement2 = observer2.measure(field2, t=0)
+
+print(f"\nResult:")
+print(f"  Collapsed to: ω = {measurement2['selected_pattern'].omega:.3f} Hz")
+print(f"  Probability: {measurement2['probability']:.4f}")
+
+# =============================================================================
+# EXAMPLE 3: Field Evolution
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 3: Unitary Field Evolution")
+print("="*70 + "\n")
+
+# Create field with few patterns
+field3 = QuantumFieldState()
+for i in range(3):
+    omega = 7.83 * (1 + 0.1*i)
+    pattern = ResonantPattern(omega=omega, amplitude=1.0, coherence=0.95)
+    field3.add_pattern(pattern, coefficient=1.0/np.sqrt(3))
+
+# Evolve the field
+dynamics = FieldDynamics(field3)
+
+print("Initial state:")
+print(f"  Coherence: {field3.coherence_metric(0):.4f}")
+
+times, evolution, coherences = dynamics.evolve(t_span=[0, 1.0], dt=0.1)
+
+print(f"\nAfter 1.0s evolution:")
+print(f"  Final coherence: {coherences[-1]:.4f}")
+print(f"  Coherence change: {coherences[-1] - coherences[0]:.4f}")
+print(f"  Evolution steps: {len(times)}")
+
+# =============================================================================
+# EXAMPLE 4: Novelty Generation
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 4: Co-Creative Pattern Merging")
+print("="*70 + "\n")
+
+# Create two parent patterns
+pattern_a = ResonantPattern(omega=7.0, amplitude=1.0, coherence=0.9)
+pattern_b = ResonantPattern(omega=10.0, amplitude=1.2, coherence=0.85)
+
+print("Parent patterns:")
+print(f"  Pattern A: ω = {pattern_a.omega:.2f} Hz, A = {pattern_a.amplitude:.2f}")
+print(f"  Pattern B: ω = {pattern_b.omega:.2f} Hz, A = {pattern_b.amplitude:.2f}")
+
+# Generate novel pattern
+novel_pattern = NoveltyGenerator.merge_patterns(pattern_a, pattern_b)
+
+print(f"\nNovel pattern (through NOV∆ operator):")
+print(f"  Frequency: ω = {novel_pattern.omega:.2f} Hz")
+print(f"  Amplitude: A = {novel_pattern.amplitude:.2f}")
+print(f"  Coherence: {novel_pattern.coherence:.3f}")
+print(f"\n  Note: Frequency modulated by φ (golden ratio) = {UniversalConstants.PHI:.4f}")
+
+# =============================================================================
+# EXAMPLE 5: Coherence Calculation
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 5: Field Coherence Metric")
+print("="*70 + "\n")
+
+# Create fields with different coherence levels
+
+# High coherence field (patterns in phase)
+high_coherence = QuantumFieldState()
+for i in range(5):
+    pattern = ResonantPattern(omega=7.83, amplitude=1.0, phase=0.0, coherence=0.99)
+    high_coherence.add_pattern(pattern, coefficient=0.45)
+
+# Low coherence field (random phases)
+low_coherence = QuantumFieldState()
+for i in range(5):
+    pattern = ResonantPattern(
+        omega=7.83 + 2*np.random.randn(),
+        amplitude=1.0,
+        phase=np.random.uniform(0, 2*np.pi),
+        coherence=0.5
+    )
+    low_coherence.add_pattern(pattern, coefficient=0.45)
+
+chi_high = high_coherence.coherence_metric(0)
+chi_low = low_coherence.coherence_metric(0)
+
+print("Coherence comparison:")
+print(f"  High coherence field: Χ = {chi_high:.4f}")
+print(f"  Low coherence field:  Χ = {chi_low:.4f}")
+print(f"\n  Ratio: {chi_high/chi_low:.2f}x")
+print("\n  High Χ → More quantum behavior")
+print("  Low Χ → More classical behavior")
+
+# =============================================================================
+# EXAMPLE 6: Complete Simulation
+# =============================================================================
+
+print("\n" + "="*70)
+print("EXAMPLE 6: Full Observer Effect Simulation")
+print("="*70 + "\n")
+
+print("Running complete simulation...")
+print("(See main script output for detailed results)\n")
+
+# Small simulation
+sim = ObserverEffectSimulation(n_patterns=3)
+results = sim.run_measurement_cycle(n_measurements=3, evolution_time=0.3)
+
+print("\nSimulation statistics:")
+print(f"  Measurements performed: {len(results['measurements'])}")
+print(f"  Final pattern count: {len(sim.field.patterns)}")
+print(f"  Mean collapse probability: {np.mean([m['probability'] for m in results['measurements']]):.4f}")
+print(f"  Mean coupling strength: {np.mean([m['coupling'] for m in results['measurements']]):.4f}")
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+print("\n" + "="*70)
+print("USAGE SUMMARY")
+print("="*70 + "\n")
+
+print("""
+Key Components:
+
+1. ResonantPattern - Fundamental entity
+   → pattern = ResonantPattern(omega, amplitude, phase, coherence)
+
+2. QuantumObserver - Consciousness interface
+   → observer = QuantumObserver(omega_observer, coherence)
+   → measurement = observer.measure(field, t)
+
+3. QuantumFieldState - Global superposition
+   → field = QuantumFieldState()
+   → field.add_pattern(pattern, coefficient)
+
+4. FieldDynamics - Evolution engine
+   → dynamics = FieldDynamics(field)
+   → times, evolution, coherences = dynamics.evolve([t0, t1])
+
+5. NoveltyGenerator - Co-creation
+   → novel = NoveltyGenerator.merge_patterns(p1, p2)
+
+6. ConsciousnessInterface - Integration
+   → consciousness = ConsciousnessInterface(field)
+   → structure = consciousness.integrate_patterns(time_window)
+
+7. ObserverEffectSimulation - Complete framework
+   → sim = ObserverEffectSimulation(n_patterns)
+   → results = sim.run_measurement_cycle(n_measurements, time)
+
+For full simulation with visualizations:
+  → python quantum_observer_resonance.py
+
+The mathematics proves: Consciousness and quantum mechanics are
+two descriptions of the same fundamental resonance dynamics.
+""")
+
+print("\n" + "="*70)
+print("END OF EXAMPLES")
+print("="*70 + "\n")
